@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flowkey Piano — Adult Beginner Lesson Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --ink: #1A1410;
+    --ivory: #FAF7F2;
+    --gold: #C9A84C;
+    --gold-light: #E8D5A3;
+    --rust: #B85C3A;
+    --sage: #4A6741;
+    --slate: #3D4A5C;
+    --muted: #8A7E72;
+    --key-white: #FEFEFE;
+    --key-black: #1A1410;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 80px 60px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 38px,
+      rgba(201,168,76,0.06) 38px,
+      rgba(201,168,76,0.06) 40px
+    );
+  }
+
+  .hero-keys {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: slideUp 0.8s ease forwards 0.2s;
+  }
+
+  .key-w {
+    width: 28px;
+    height: 80px;
+    background: var(--key-white);
+    border-radius: 0 0 4px 4px;
+    border: 1px solid #ddd;
+    position: relative;
+  }
+
+  .key-b {
+    width: 18px;
+    height: 50px;
+    background: var(--key-black);
+    border-radius: 0 0 3px 3px;
+    margin-left: -10px;
+    margin-right: -10px;
+    z-index: 2;
+    position: relative;
+  }
+
+  .key-w.active { background: var(--gold); }
+  .key-b.active { background: var(--rust); }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: slideUp 0.8s ease forwards 0.4s;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 72px);
+    line-height: 1.1;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: slideUp 0.8s ease forwards 0.5s;
+  }
+
+  .hero h1 em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: rgba(245,240,232,0.65);
+    max-width: 520px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: slideUp 0.8s ease forwards 0.6s;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    opacity: 0;
+    animation: slideUp 0.8s ease forwards 0.7s;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+  }
+
+  .pill-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  /* NAV */
+  .week-nav {
+    background: var(--ink);
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding: 0 60px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .week-nav::-webkit-scrollbar { display: none; }
+
+  .week-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: rgba(245,240,232,0.4);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 16px 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .week-btn:hover { color: var(--cream); }
+  .week-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* MAIN */
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* WEEK PANEL */
+  .week-panel { display: none; }
+  .week-panel.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .week-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(26,20,16,0.12);
+  }
+
+  .week-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    font-weight: 700;
+    color: var(--gold-light);
+    line-height: 1;
+    letter-spacing: -3px;
+    opacity: 0.5;
+  }
+
+  .week-meta h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  .week-meta p {
+    color: var(--muted);
+    font-size: 14px;
+    max-width: 480px;
+  }
+
+  .week-theme {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 10px;
+  }
+
+  /* SECTIONS */
+  .sections-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .section-card {
+    background: var(--ivory);
+    border: 1px solid rgba(26,20,16,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 24px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+
+  .section-head:hover { background: rgba(201,168,76,0.06); }
+
+  .section-icon {
+    width: 36px; height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .icon-obj   { background: #EEF0E8; }
+  .icon-warm  { background: #F0EBE8; }
+  .icon-theory{ background: #E8ECF0; }
+  .icon-ear   { background: #EBE8F0; }
+  .icon-rep   { background: #F0EDE8; }
+  .icon-flo   { background: #E8F0EC; }
+  .icon-off   { background: #F0EAE8; }
+  .icon-assess{ background: #EEE8F0; }
+  .icon-motiv { background: #F0EEE8; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .section-toggle {
+    margin-left: auto;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(26,20,16,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--muted);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+
+  .section-card.open .section-toggle { transform: rotate(45deg); }
+
+  .section-body {
+    display: none;
+    padding: 0 24px 24px;
+    border-top: 1px solid rgba(26,20,16,0.06);
+  }
+
+  .section-card.open .section-body { display: block; }
+
+  .section-body ul {
+    list-style: none;
+    padding-top: 16px;
+  }
+
+  .section-body ul li {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    border-bottom: 1px dashed rgba(26,20,16,0.07);
+  }
+
+  .section-body ul li:last-child { border-bottom: none; }
+
+  .li-marker {
+    color: var(--gold);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .flo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #E8F0EC;
+    border: 1px solid #B8D4C4;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--sage);
+    text-transform: uppercase;
+    margin-top: 8px;
+    display: block;
+    width: fit-content;
+  }
+
+  .hybrid-note {
+    display: flex;
+    gap: 8px;
+    background: rgba(61,74,92,0.06);
+    border-left: 3px solid var(--slate);
+    border-radius: 0 4px 4px 0;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--slate);
+    margin-top: 12px;
+  }
+
+  .challenge-box {
+    background: linear-gradient(135deg, #1A1410 0%, #2D231A 100%);
+    color: var(--cream);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+
+  .challenge-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .challenge-box p { font-size: 13px; line-height: 1.6; color: rgba(245,240,232,0.8); }
+
+  /* PROGRESS BAR */
+  .progress-track {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 40px 60px;
+    margin-top: 0;
+  }
+
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .progress-steps {
+    display: flex;
+    gap: 0;
+    position: relative;
+  }
+
+  .progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    height: 2px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .prog-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+  }
+
+  .prog-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    transition: all 0.25s;
+  }
+
+  .prog-step.active .prog-dot {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .prog-step:hover .prog-dot {
+    border-color: var(--gold-light);
+    color: var(--gold-light);
+  }
+
+  .prog-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+  }
+
+  .prog-step.active .prog-lbl { color: var(--gold); }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.3);
+    padding: 32px 60px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+
+  footer span { color: var(--gold); }
+
+  /* ANIMATIONS */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .hero { padding: 48px 24px 40px; }
+    .week-nav { padding: 0 24px; }
+    .main { padding: 40px 20px; }
+    .progress-track { padding: 32px 24px; }
+    footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
+    .prog-lbl { display: none; }
+    .week-number { font-size: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-keys">
+    <div class="key-w active"></div>
+    <div class="key-b"></div>
+    <div class="key-w"></div>
+    <div class="key-b active"></div>
+    <div class="key-w"></div>
+    <div class="key-w"></div>
+    <div class="key-b"></div>
+    <div class="key-w active"></div>
+    <div class="key-b"></div>
+    <div class="key-w"></div>
+    <div class="key-b"></div>
+    <div class="key-w"></div>
+    <div class="key-w active"></div>
+    <div class="key-b"></div>
+    <div class="key-w"></div>
+    <div class="key-b"></div>
+    <div class="key-w"></div>
+    <div class="key-w"></div>
+  </div>
+  <div class="hero-tag">Flowkey App · Official Lesson Plan</div>
+  <h1>Adult Beginner<br><em>Piano Journey</em></h1>
+  <p class="hero-sub">An 8-week progressive curriculum for adult beginners — designed for hybrid in-person and online learning, powered by the Flowkey Piano app.</p>
+  <div class="hero-pills">
+    <div class="pill"><div class="pill-dot"></div>8 Weeks</div>
+    <div class="pill"><div class="pill-dot"></div>Adult Beginners</div>
+    <div class="pill"><div class="pill-dot"></div>Hybrid Format</div>
+    <div class="pill"><div class="pill-dot"></div>Flowkey App Integrated</div>
+    <div class="pill"><div class="pill-dot"></div>Classical · Jazz · Pop</div>
+  </div>
+</header>
+
+<!-- WEEK NAV -->
+<nav class="week-nav">
+  <button class="week-btn active" onclick="showWeek(1, this)">Week 1</button>
+  <button class="week-btn" onclick="showWeek(2, this)">Week 2</button>
+  <button class="week-btn" onclick="showWeek(3, this)">Week 3</button>
+  <button class="week-btn" onclick="showWeek(4, this)">Week 4</button>
+  <button class="week-btn" onclick="showWeek(5, this)">Week 5</button>
+  <button class="week-btn" onclick="showWeek(6, this)">Week 6</button>
+  <button class="week-btn" onclick="showWeek(7, this)">Week 7</button>
+  <button class="week-btn" onclick="showWeek(8, this)">Week 8</button>
+</nav>
+
+<!-- PROGRESS -->
+<div class="progress-track">
+  <div class="progress-label">Your 8-Week Progression</div>
+  <div class="progress-steps" id="progressSteps">
+    <div class="prog-step active" onclick="showWeek(1, null, 1)">
+      <div class="prog-dot">1</div>
+      <div class="prog-lbl">Foundations</div>
+    </div>
+    <div class="prog-step" onclick="showWeek(2, null, 2)">
+      <div class="prog-dot">2</div>
+      <div class="prog-lbl">Hands</div>
+    </div>
+    <div class="prog-step" onclick="showWeek(3, null, 3)">
+      <div class="prog-dot">3</div>
+      <div class="prog-lbl">Chords</div>
+    </div>
+    <div class="prog-step" onclick="showWeek(4, null, 4)">
+      <div class="prog-dot">4</div>
+      <div class="prog-lbl">Rhythm</div>
+    </div>
+    <div class="prog-step" onclick="showWeek(5, null, 5)">
+      <div class="prog-dot">5</div>
+      <div class="prog-lbl">Melody</div>
+    </div>
+    <div class="prog-step" onclick="showWeek(6, null, 6)">
+      <div class="prog-dot">6</div>
+      <div class="prog-lbl">Dynamics</div>
+    </div>
+    <div class="prog-step" onclick="showWeek(7, null, 7)">
+      <div class="prog-dot">7</div>
+      <div class="prog-lbl">Repertoire</div>
+    </div>
+    <div class="prog-step" onclick="showWeek(8, null, 8)">
+      <div class="prog-dot">8</div>
+      <div class="prog-lbl">Recital</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- ═══════════════ WEEK 1 ═══════════════ -->
+  <div class="week-panel active" id="week-1">
+    <div class="week-header">
+      <div class="week-number">01</div>
+      <div class="week-meta">
+        <div class="week-theme">Foundation Phase</div>
+        <h2>Hello, Piano — Posture, Notes & Your First Sounds</h2>
+        <p>This week is about building confidence, understanding the instrument, and finding your seat at the keys without any pressure to perform.</p>
+      </div>
+    </div>
+    <div class="sections-grid">
+
+      <div class="section-card open">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-obj">🎯</div>
+          <div><div class="section-label">Section 1</div><div class="section-title">Learning Objectives</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span>Identify all white keys (C–B) by name and locate them on a full keyboard</li>
+            <li><span class="li-marker">→</span>Achieve correct seated posture: bench height, wrist alignment, and curved fingers</li>
+            <li><span class="li-marker">→</span>Understand the layout of the piano (treble/bass, octaves, landmark notes: Middle C, C4)</li>
+            <li><span class="li-marker">→</span>Play individual notes with consistent, relaxed tone using proper finger weight</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-warm">🤲</div>
+          <div><div class="section-label">Section 2</div><div class="section-title">Warm-Up & Finger Exercises</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Hand stretches (3 min):</strong> Wrist rotations, finger fans, and gentle knuckle presses. Never skip this — adult hands need warm-up time.</li>
+            <li><span class="li-marker">→</span><strong>"Raindrop" exercise (5 min):</strong> Press each white key from C to G with fingers 1–5, letting each note ring fully before moving. Focus: no tension in the wrist.</li>
+            <li><span class="li-marker">→</span><strong>Finger independence tap (3 min):</strong> Place hand flat on a table; lift each finger individually 10 times, especially fingers 4 and 5.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-theory">📖</div>
+          <div><div class="section-label">Section 3</div><div class="section-title">Music Theory</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>The musical alphabet:</strong> A B C D E F G — introduce how it repeats across octaves using the black key groups (2s and 3s) as landmarks</li>
+            <li><span class="li-marker">→</span><strong>The staff:</strong> Treble clef, 5 lines, 4 spaces. Mnemonic: Every Good Boy Does Fine (lines); FACE (spaces)</li>
+            <li><span class="li-marker">→</span><strong>Note values intro:</strong> Whole note (4 beats), half note (2 beats), quarter note (1 beat). Clap examples while counting aloud</li>
+            <li><span class="li-marker">→</span><strong>Middle C:</strong> Location on the keyboard, on the staff (ledger line), and in both clefs</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-ear">👂</div>
+          <div><div class="section-label">Section 4</div><div class="section-title">Ear Training & Improvisation</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>High vs Low:</strong> Teacher plays two notes — student identifies which is higher. Repeat 8–10 rounds. Simple but builds foundational relative pitch.</li>
+            <li><span class="li-marker">→</span><strong>Sound & Sustain:</strong> Play Middle C and count how long it rings. Discuss how a piano produces sound (hammer striking string). Creates awareness of listening.</li>
+            <li><span class="li-marker">→</span><strong>Free exploration (5 min):</strong> Student plays any white keys they like, no rules. Improvisation from day one removes fear and encourages curiosity.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-rep">🎵</div>
+          <div><div class="section-label">Section 5</div><div class="section-title">Repertoire Suggestions</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Classical:</strong> "Ode to Joy" (Beethoven) — right hand only, C position, 5 notes. Iconic and immediately rewarding.</li>
+            <li><span class="li-marker">→</span><strong>Folk/Pop:</strong> "Mary Had a Little Lamb" — simple melodic pattern, good for finger numbering practice</li>
+            <li><span class="li-marker">→</span><strong>Adult-friendly goal:</strong> Choose 1 piece the student loves and listen to a recording together. Plant the seed of what they're working toward over 8 weeks.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-flo">📱</div>
+          <div><div class="section-label">Section 6</div><div class="section-title">Flowkey App Guided Practice</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Setup session:</strong> Configure the app — connect MIDI keyboard or use built-in touch keyboard. Set skill level to Beginner.</li>
+            <li><span class="li-marker">→</span><strong>Flowkey Exercise: "Note Recognition"</strong> — Use the app's note-name quiz to reinforce the musical alphabet. Aim for 90% accuracy on white keys by end of session.</li>
+            <li><span class="li-marker">→</span><strong>Flowkey Exercise: "Guided First Song"</strong> — Use the falling-note display to play "Ode to Joy" right hand. The visual feedback removes anxiety about reading music immediately.</li>
+            <li><span class="li-marker">→</span><strong>Home practice:</strong> 15 min/day on Flowkey. Goal: complete the "Week 1 Beginner Module" and earn the first in-app badge.</li>
+          </ul>
+          <div class="flo-badge">🟢 Flowkey App · Week 1 Module · ~15 min/day</div>
+          <div class="hybrid-note">💻 <strong>Online format:</strong> Share screen during lesson so teacher can observe Flowkey app usage in real time. Use video call's annotation feature to mark the keyboard diagram together.</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-off">🏠</div>
+          <div><div class="section-label">Section 7</div><div class="section-title">Offline Practice Activities</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Keyboard map:</strong> Print or draw a keyboard diagram. Label every white key. Put it on your fridge. Say the names aloud when you pass it.</li>
+            <li><span class="li-marker">→</span><strong>Silent finger taps:</strong> Tap finger sequences 1-2-3-4-5 and 5-4-3-2-1 on any flat surface — desk, knee, table — while watching TV or commuting.</li>
+            <li><span class="li-marker">→</span><strong>Music listening journal:</strong> Listen to one piece of piano music per day (suggest: Beethoven, Einaudi, or a jazz pianist). Write one word describing how it made you feel.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-assess">📊</div>
+          <div><div class="section-label">Section 8</div><div class="section-title">Assessment & Progress Tracking</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>End-of-week check:</strong> Can the student name every white key when pointed to randomly? (Target: 100%)</li>
+            <li><span class="li-marker">→</span><strong>Performance marker:</strong> Play "Ode to Joy" RH with correct fingering and no pauses between notes</li>
+            <li><span class="li-marker">→</span><strong>Flowkey App metric:</strong> Screenshot the Week 1 module completion score. Share with teacher.</li>
+            <li><span class="li-marker">→</span><strong>Self-reflection (written):</strong> "What surprised me most about the piano this week?" One sentence is enough.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-motiv">✨</div>
+          <div><div class="section-label">Section 9</div><div class="section-title">Motivation & Creative Challenge</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <div class="challenge-box">
+            <h4>🎯 Week 1 Creative Challenge</h4>
+            <p>Using only the 5 white keys C D E F G, compose a 4-note melody that describes your mood today. Give it a title. There are no wrong answers — this is yours. Play it to the teacher (or record it) at the next lesson. This small act of creation is the beginning of your musical voice.</p>
+          </div>
+          <ul style="margin-top:16px;">
+            <li><span class="li-marker">→</span><strong>Mindset reframe:</strong> Adults often feel embarrassed learning alongside children. Remember: adult brains understand music theory faster and have deeper emotional connection to music. Your maturity is an advantage.</li>
+            <li><span class="li-marker">→</span><strong>Celebrate Week 1:</strong> You've started. That's the hardest step. Add a ✓ to your practice calendar for every day you sit at the piano, even for just 5 minutes.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════ WEEK 2 ═══════════════ -->
+  <div class="week-panel" id="week-2">
+    <div class="week-header">
+      <div class="week-number">02</div>
+      <div class="week-meta">
+        <div class="week-theme">Foundation Phase</div>
+        <h2>Two Hands — Left Hand Intro & Simple Coordination</h2>
+        <p>The left hand awakens. We introduce bass clef, LH position, and the first taste of hands-together playing.</p>
+      </div>
+    </div>
+    <div class="sections-grid">
+      <div class="section-card open">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-obj">🎯</div>
+          <div><div class="section-label">Section 1</div><div class="section-title">Learning Objectives</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span>Read and play C position with the left hand (C–G below Middle C)</li>
+            <li><span class="li-marker">→</span>Understand bass clef: lines (Good Boys Do Fine Always) and spaces (All Cows Eat Grass)</li>
+            <li><span class="li-marker">→</span>Play a simple melody with RH while LH holds a single root note</li>
+            <li><span class="li-marker">→</span>Internalize steady quarter-note pulse at 60–70 BPM with a metronome</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-warm">🤲</div>
+          <div><div class="section-label">Section 2</div><div class="section-title">Warm-Up & Finger Exercises</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>5-note LH scale (C–G):</strong> Slow and deliberate, fingers 5–1, listening for even volume on each note</li>
+            <li><span class="li-marker">→</span><strong>Mirror exercise:</strong> RH and LH play the same 5-note pattern simultaneously (both going up, both going down). Builds symmetrical coordination.</li>
+            <li><span class="li-marker">→</span><strong>Metronome introduction:</strong> Set to 60 BPM. Clap quarter notes. Then play Middle C repeatedly in time. Treat the metronome as a bandmate, not a drill sergeant.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-theory">📖</div>
+          <div><div class="section-label">Section 3</div><div class="section-title">Music Theory</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Bass clef:</strong> The F clef — note that the two dots surround the F line. Memorize landmark notes: Bass C, G, and F</li>
+            <li><span class="li-marker">→</span><strong>Time signature 4/4:</strong> 4 beats per measure, quarter note gets 1 beat. Count "1 2 3 4" aloud while playing</li>
+            <li><span class="li-marker">→</span><strong>Bar lines and measures:</strong> The "containers" of music. Draw and label a 4-bar phrase on manuscript paper</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-ear">👂</div>
+          <div><div class="section-label">Section 4</div><div class="section-title">Ear Training & Improvisation</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Stepping vs. Skipping:</strong> Teacher plays two notes — student identifies if they are "next-door neighbors" (steps) or "jumping" (skips). This is the foundation of interval recognition.</li>
+            <li><span class="li-marker">→</span><strong>Call & Response:</strong> Teacher plays a 2-note phrase in the RH; student answers with 2 notes in the LH. Pure musical conversation — no wrong answers.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-rep">🎵</div>
+          <div><div class="section-label">Section 5</div><div class="section-title">Repertoire Suggestions</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Classical:</strong> "Lightly Row" — introduces both hands with a simple LH accompaniment pattern (root notes)</li>
+            <li><span class="li-marker">→</span><strong>Pop:</strong> Simplified "Hallelujah" (Cohen) — just the opening 4-bar phrase, RH only, then add drone LH on C and G</li>
+            <li><span class="li-marker">→</span><strong>Continue:</strong> Polish "Ode to Joy" from Week 1 — now add a simple LH C–C–G–G accompaniment</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-flo">📱</div>
+          <div><div class="section-label">Section 6</div><div class="section-title">Flowkey App Guided Practice</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Flowkey Exercise: "Left Hand Training Module"</strong> — Follow the app's LH-only exercises in C position. Aim for 3 error-free runs of each exercise.</li>
+            <li><span class="li-marker">→</span><strong>Flowkey Exercise: "Rhythm Trainer"</strong> — Use the app's rhythm tap feature at 60 BPM. Tap along to quarter-note patterns.</li>
+            <li><span class="li-marker">→</span><strong>Home practice (15–20 min/day):</strong> Alternate between LH exercises and reviewing Week 1 song in the app.</li>
+          </ul>
+          <div class="flo-badge">🟢 Flowkey App · Week 2 Module · ~20 min/day</div>
+          <div class="hybrid-note">💻 <strong>Online format:</strong> Ask student to position camera to show both hands clearly. Record 30-second clips of practice for asynchronous teacher feedback between sessions.</div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-off">🏠</div>
+          <div><div class="section-label">Section 7</div><div class="section-title">Offline Practice Activities</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Rhythmic clapping:</strong> Clap while walking: "1 and 2 and 3 and 4" — feel the pulse in your body, not just your fingers</li>
+            <li><span class="li-marker">→</span><strong>Flash cards:</strong> Make 10 note-name flashcards (treble + bass clef). Quiz yourself for 3 minutes before bed</li>
+            <li><span class="li-marker">→</span><strong>Listen:</strong> This week's listening: Debussy's "Clair de Lune" (first 2 minutes). Notice how the left hand creates atmosphere while the right hand sings.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-assess">📊</div>
+          <div><div class="section-label">Section 8</div><div class="section-title">Assessment & Progress Tracking</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>LH check:</strong> Play C–D–E–F–G with LH, fingers 5–4–3–2–1, even tempo, no peeking at hands after 3 practice sessions</li>
+            <li><span class="li-marker">→</span><strong>Sight-reading mini-quiz:</strong> Teacher writes 4 notes on staff (2 treble, 2 bass). Student names them in 10 seconds.</li>
+            <li><span class="li-marker">→</span><strong>Flowkey metric:</strong> Week 2 module accuracy score (target: 80%+)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-motiv">✨</div>
+          <div><div class="section-label">Section 9</div><div class="section-title">Motivation & Creative Challenge</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <div class="challenge-box">
+            <h4>🎯 Week 2 Creative Challenge</h4>
+            <p>Record yourself playing your Week 1 melody (4-note composition) again. Compare it to last week. Can you hear improvement? Save both recordings. This is your musical time capsule. By Week 8, you'll be amazed by the contrast.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ WEEK 3 ═══════════════ -->
+  <div class="week-panel" id="week-3">
+    <div class="week-header">
+      <div class="week-number">03</div>
+      <div class="week-meta">
+        <div class="week-theme">Building Phase</div>
+        <h2>Chords Unlocked — Triads, C Major & Playing Together</h2>
+        <p>The moment everything clicks: your first three-note chord. This week transforms single notes into harmony.</p>
+      </div>
+    </div>
+    <div class="sections-grid">
+      <div class="section-card open">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-obj">🎯</div>
+          <div><div class="section-label">Section 1</div><div class="section-title">Learning Objectives</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span>Understand and play C major, F major, and G major triads in root position</li>
+            <li><span class="li-marker">→</span>Recognize the "skip-a-note" structure of triads (1st, 3rd, 5th scale degrees)</li>
+            <li><span class="li-marker">→</span>Play I–IV–V chord progression in C major with LH while RH plays melody</li>
+            <li><span class="li-marker">→</span>Distinguish major (happy) from minor (sad) by sound</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-warm">🤲</div>
+          <div><div class="section-label">Section 2</div><div class="section-title">Warm-Up & Finger Exercises</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Chord "drops" (5 min):</strong> Lift hand 6 inches above keyboard, drop onto C-E-G chord, let the weight of the arm create the sound. Repeat 10x each hand.</li>
+            <li><span class="li-marker">→</span><strong>Hanon Exercise No.1 (simplified):</strong> Fingers 1-2-3-4-5 and back, C to C, very slowly at 60 BPM. The goal is evenness, not speed.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-theory">📖</div>
+          <div><div class="section-label">Section 3</div><div class="section-title">Music Theory</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Triads:</strong> Root, 3rd, 5th. Major = root + 4 semitones + 3 semitones. Minor = root + 3 + 4. Build both on C and compare.</li>
+            <li><span class="li-marker">→</span><strong>The I-IV-V progression:</strong> The most common progression in Western music (blues, pop, folk, rock). In C: C-F-G. Recognizing this opens hundreds of songs.</li>
+            <li><span class="li-marker">→</span><strong>Intervals — 3rds and 5ths:</strong> Visual and physical recognition on the keyboard. A third skips one key; a fifth skips three.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-ear">👂</div>
+          <div><div class="section-label">Section 4</div><div class="section-title">Ear Training & Improvisation</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Major vs Minor listening:</strong> Teacher plays C major then C minor. "Happy or sad?" Do 8 rounds with different chords. Start building an internal chord library.</li>
+            <li><span class="li-marker">→</span><strong>Chord improvisation:</strong> LH holds C major chord. RH improvises freely on C-D-E-G-A (C pentatonic). You'll sound musical immediately — this never gets old.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-rep">🎵</div>
+          <div><div class="section-label">Section 5</div><div class="section-title">Repertoire Suggestions</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Pop:</strong> "Let It Be" (Beatles) — verse uses C-G-Am-F. Simplified version: LH plays root notes, RH plays melody</li>
+            <li><span class="li-marker">→</span><strong>Classical:</strong> Bach "Minuet in G" — introduce this as a future goal. Just listen this week.</li>
+            <li><span class="li-marker">→</span><strong>Jazz intro:</strong> Simple 12-bar blues in C using I-IV-V. Teacher demonstrates; student plays LH roots on beats 1 and 3.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-flo">📱</div>
+          <div><div class="section-label">Section 6</div><div class="section-title">Flowkey App Guided Practice</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Flowkey Exercise: "Chord Builder"</strong> — Use the app's chord recognition tool. Build C, F, and G major on the app keyboard, then transfer to acoustic/digital piano.</li>
+            <li><span class="li-marker">→</span><strong>Flowkey Exercise: "Song of the Week"</strong> — Select a simplified "Let It Be" or equivalent chord-based song in the app's library. Use the slow-down feature to practice at 70% speed.</li>
+            <li><span class="li-marker">→</span><strong>Daily goal:</strong> 3 chord changes (C→F→G→C) without looking at hands by end of week.</li>
+          </ul>
+          <div class="flo-badge">🟢 Flowkey App · Week 3 Module · ~20 min/day</div>
+          <div class="hybrid-note">💻 <strong>Online format:</strong> Use Flowkey App's built-in progress dashboard — student shares screen showing chord accuracy scores. Teacher can assign specific in-app exercises remotely.</div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-off">🏠</div>
+          <div><div class="section-label">Section 7</div><div class="section-title">Offline Practice Activities</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Chord chart:</strong> Draw the three chords (C, F, G) on a paper keyboard diagram. Number the fingers used. Keep it on the music stand.</li>
+            <li><span class="li-marker">→</span><strong>Song detective:</strong> Listen to 3 songs this week and try to hear when the chord changes happen. Tap your foot on beat 1 of each new chord. You'll be surprised how many songs use I-IV-V.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-assess">📊</div>
+          <div><div class="section-label">Section 8</div><div class="section-title">Assessment</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span>Play C-F-G-C chord progression, LH, 4 times through without stopping (target: 80 BPM)</li>
+            <li><span class="li-marker">→</span>Identify major vs minor when teacher plays 6 random chords (target: 5/6 correct)</li>
+            <li><span class="li-marker">→</span>Flowkey App chord accuracy: 85%+ on Week 3 chord exercises</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-motiv">✨</div>
+          <div><div class="section-label">Section 9</div><div class="section-title">Motivation & Creative Challenge</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <div class="challenge-box">
+            <h4>🎯 Week 3 Creative Challenge</h4>
+            <p>You now know 3 chords. Hundreds of famous songs use exactly these three chords. Choose one song you love and look up its chord chart online. Try to play the first 4 chords — even if imperfect. This is the moment music becomes personal.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ WEEKS 4–8 (Summaries) ═══════════════ -->
+
+  <div class="week-panel" id="week-4">
+    <div class="week-header">
+      <div class="week-number">04</div>
+      <div class="week-meta">
+        <div class="week-theme">Building Phase</div>
+        <h2>Rhythm Deep Dive — Eighth Notes, Syncopation & Groove</h2>
+        <p>Rhythm is the backbone of music. This week we move beyond quarter notes to explore eighth-note patterns and how adult learners can feel the groove, not just count it.</p>
+      </div>
+    </div>
+    <div class="sections-grid">
+      <div class="section-card open">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-obj">🎯</div>
+          <div><div class="section-label">All Sections</div><div class="section-title">Week 4 Overview</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Objectives:</strong> Read and clap eighth-note patterns; play a melody using quarter + eighth note combinations; understand dotted quarter notes (dotted = 1.5 beats)</li>
+            <li><span class="li-marker">→</span><strong>Warm-Up:</strong> "1-and-2-and" clapping at 70 BPM. Then transfer to keyboard — alternate C and E on every eighth note. Builds subdivision instinct.</li>
+            <li><span class="li-marker">→</span><strong>Theory:</strong> Eighth notes (1/2 beat), dotted rhythms, syncopation intro — placing accents on the "and." Count aloud: "1 AND 2 AND 3 AND 4 AND"</li>
+            <li><span class="li-marker">→</span><strong>Ear Training:</strong> "Rhythm echo" — teacher claps a 2-bar rhythmic pattern, student echoes it exactly. Builds rhythmic memory. Then reverse: student invents, teacher echoes.</li>
+            <li><span class="li-marker">→</span><strong>Repertoire:</strong> "Für Elise" opening (simplified); simplified "Clocks" riff (Coldplay) — both excellent for eighth-note feel in adult context</li>
+            <li><span class="li-marker">→</span><strong>Flowkey App:</strong> "Rhythm Challenge" module — the app's rhythm accuracy trainer with visual waveform feedback. Target: 90% timing accuracy at 75 BPM</li>
+            <li><span class="li-marker">→</span><strong>Offline:</strong> Body percussion — tap thigh on beats 1&3, clap on 2&4 (basic backbeat). Do this while listening to music daily.</li>
+            <li><span class="li-marker">→</span><strong>Assessment:</strong> Perform a 4-bar rhythm from notation at sight; Flowkey accuracy score; RH melody with correct rhythmic values</li>
+            <li><span class="li-marker">→</span><strong>Challenge:</strong> Write your own 2-bar rhythm pattern using only quarter and eighth notes. Teach it to someone else (explaining teaches best).</li>
+          </ul>
+          <div class="flo-badge">🟢 Flowkey App · Week 4 Rhythm Module · ~20–25 min/day</div>
+          <div class="hybrid-note">💻 <strong>Online:</strong> Use a shared metronome app (e.g., Metronome Online) so teacher and student click in sync during online sessions.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="week-panel" id="week-5">
+    <div class="week-header">
+      <div class="week-number">05</div>
+      <div class="week-meta">
+        <div class="week-theme">Expanding Phase</div>
+        <h2>Melody & Scales — C Major Scale, Hand Position Shifts</h2>
+        <p>The first full scale unlocks the entire keyboard. Students begin shifting hand position and reading notes beyond the 5-note C position.</p>
+      </div>
+    </div>
+    <div class="sections-grid">
+      <div class="section-card open">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-obj">🎯</div>
+          <div><div class="section-label">All Sections</div><div class="section-title">Week 5 Overview</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Objectives:</strong> Play C major scale (one octave, RH and LH separately); execute the thumb tuck correctly; read notes through D5 in treble clef</li>
+            <li><span class="li-marker">→</span><strong>Warm-Up:</strong> Slow scale, each note held 2 beats. Then "two octave crawl" — no rush, focus on smooth thumb-under motion. The thumb tuck is the technical milestone of this week.</li>
+            <li><span class="li-marker">→</span><strong>Theory:</strong> W-W-H-W-W-W-H pattern (whole and half steps). Build the C major scale from the pattern and understand why it sounds "right." Introduce the concept of key signature (C major = no sharps or flats).</li>
+            <li><span class="li-marker">→</span><strong>Ear Training:</strong> "Does it resolve?" — play the 7th note (B) and sit on it. Feel the tension. Then play C. Feel the release. This is the basis of all harmonic tension and resolution.</li>
+            <li><span class="li-marker">→</span><strong>Improvisation:</strong> Use the full C major scale to improvise a 4-bar melody. No LH this week — just melody. Focus on musical shape: start low, peak in the middle, resolve at the end.</li>
+            <li><span class="li-marker">→</span><strong>Repertoire:</strong> "Joy to the World" — uses a descending major scale, perfect for week 5; Burgmüller "Arabesque" (introduce slowly); simplified Einaudi "Experience" opening</li>
+            <li><span class="li-marker">→</span><strong>Flowkey App:</strong> "Scale Trainer" module — the app tracks accuracy and smoothness of scale passages. Practice at 80, 90, then 100 BPM. Also use "Note Reading Drill" for notes above the staff.</li>
+            <li><span class="li-marker">→</span><strong>Offline:</strong> Air-piano the thumb-tuck motion while away from the instrument. The muscle memory of passing the thumb under is built partly through mental rehearsal.</li>
+            <li><span class="li-marker">→</span><strong>Assessment:</strong> Play C major scale RH, one octave, at 80 BPM, smooth thumb tuck. Teacher rates: Evenness (1–5), Tone (1–5), Tempo (1–5).</li>
+            <li><span class="li-marker">→</span><strong>Challenge:</strong> Try building a G major scale using the W-W-H pattern. Figure out which note needs a sharp. You've just discovered your second key!</li>
+          </ul>
+          <div class="flo-badge">🟢 Flowkey App · Scale & Note Reading Modules · ~25 min/day</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="week-panel" id="week-6">
+    <div class="week-header">
+      <div class="week-number">06</div>
+      <div class="week-meta">
+        <div class="week-theme">Expanding Phase</div>
+        <h2>Dynamics & Phrasing — Playing with Emotion</h2>
+        <p>Technique without expression is typing. This week we add the human element: dynamics, legato, staccato, and musical storytelling.</p>
+      </div>
+    </div>
+    <div class="sections-grid">
+      <div class="section-card open">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-obj">🎯</div>
+          <div><div class="section-label">All Sections</div><div class="section-title">Week 6 Overview</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Objectives:</strong> Understand and apply p, mp, mf, f dynamic markings; play legato phrases with connected, smooth tone; play staccato with a light, detached touch; apply a musical crescendo over 4 bars</li>
+            <li><span class="li-marker">→</span><strong>Warm-Up:</strong> Play the C major scale 4 times: pp (whisper), mp, mf, ff (bold). Then reverse. Develops physical control of key velocity — the only way a piano changes volume.</li>
+            <li><span class="li-marker">→</span><strong>Theory:</strong> Italian dynamic terms (pianissimo to fortissimo), hairpin crescendo/decrescendo, slur vs staccato markings. Introduce fermata (hold) and the concept of phrasing as "musical breathing."</li>
+            <li><span class="li-marker">→</span><strong>Ear Training:</strong> "Tell me the story" — teacher plays the same 4-bar phrase three ways: robotic, with dynamics, with full phrasing. Student describes what changes emotionally. Powerful for adult learners.</li>
+            <li><span class="li-marker">→</span><strong>Improvisation:</strong> Improvise an 8-bar piece that starts soft, builds to a peak (bar 5–6), then fades. The constraint forces intentional musical shaping.</li>
+            <li><span class="li-marker">→</span><strong>Repertoire:</strong> Beethoven "Moonlight Sonata" Mvt. 1 (simplified 4-bar excerpt); Yiruma "River Flows in You" (opening — all about dynamic shaping); revisit "Ode to Joy" and add all dynamics</li>
+            <li><span class="li-marker">→</span><strong>Flowkey App:</strong> Many apps include a velocity/dynamics visualizer — use it to see the height of each note-hit as a bar graph. The visual feedback is extremely powerful. Practice a phrase until the dynamic shape is visible in the graph.</li>
+            <li><span class="li-marker">→</span><strong>Offline:</strong> Sing or hum your current piece while doing dishes or commuting. Singers naturally shape phrases. Hearing your melody vocally informs how you'll play it.</li>
+            <li><span class="li-marker">→</span><strong>Assessment:</strong> Play a 8-bar piece with clear p and f sections. Teacher gives written feedback on 3 things done well and 1 to improve.</li>
+            <li><span class="li-marker">→</span><strong>Challenge:</strong> Take a piece you know well and reinterpret it entirely — play it as if it's a lullaby, then as a march. Same notes, completely different music.</li>
+          </ul>
+          <div class="flo-badge">🟢 Flowkey App · Dynamics & Phrasing Module · ~25 min/day</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="week-panel" id="week-7">
+    <div class="week-header">
+      <div class="week-number">07</div>
+      <div class="week-meta">
+        <div class="week-theme">Performance Phase</div>
+        <h2>Repertoire Deep Work — Polish & Performance Preparation</h2>
+        <p>Two weeks before the finish line. This week is entirely focused on bringing 2–3 pieces to performance level — musically, technically, and emotionally.</p>
+      </div>
+    </div>
+    <div class="sections-grid">
+      <div class="section-card open">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-obj">🎯</div>
+          <div><div class="section-label">All Sections</div><div class="section-title">Week 7 Overview</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Objectives:</strong> Perform 2–3 selected pieces from memory or with minimal score reference; apply all learned skills (dynamics, rhythm, phrasing, correct fingering) simultaneously; manage performance anxiety</li>
+            <li><span class="li-marker">→</span><strong>Warm-Up:</strong> "Problem spot" practice — identify the one hardest bar in each piece. Isolate it. Play it 10x slowly. Then integrate it. This is how professionals practice.</li>
+            <li><span class="li-marker">→</span><strong>Theory:</strong> Review — play a chord progression and identify the Roman numeral analysis (I, IV, V). Connect theory to the actual pieces being polished. Theory should illuminate, not burden.</li>
+            <li><span class="li-marker">→</span><strong>Ear Training:</strong> Record yourself playing a piece and listen back critically. Note 2 things you love and 2 things to fix. Self-assessment is a professional skill.</li>
+            <li><span class="li-marker">→</span><strong>Repertoire for Recital (choose 2–3):</strong> "Ode to Joy" (Beethoven, full version with LH chords); "Für Elise" opening; simplified "River Flows in You"; 12-bar blues improvisation (counts as a "piece"); the student's own 4-bar composition from Week 1 (expanded)</li>
+            <li><span class="li-marker">→</span><strong>Flowkey App:</strong> Use the app's "Performance Run-Through" mode (no stopping, real-time score). Simulate performance conditions. Aim for 3 clean run-throughs of each piece per day.</li>
+            <li><span class="li-marker">→</span><strong>Offline:</strong> Mental practice — close your eyes and "play" the piece in your mind, hearing every note. Neuroscience shows this activates the same motor pathways as physical practice.</li>
+            <li><span class="li-marker">→</span><strong>Performance anxiety tip:</strong> Breathe before you begin (2 deep breaths). Focus on the music, not the listener. Remember: adults in the audience want you to succeed.</li>
+            <li><span class="li-marker">→</span><strong>Assessment:</strong> Mock recital — perform all pieces for a friend, family member, or record and self-assess. Debrief: what felt good? What needs one more week?</li>
+            <li><span class="li-marker">→</span><strong>Challenge:</strong> Choose one piece and add your own interpretation — a ritardando at the end, a different dynamic in bar 3, something that makes it undeniably yours.</li>
+          </ul>
+          <div class="flo-badge">🟢 Flowkey App · Performance Mode · 3x run-throughs/day per piece</div>
+          <div class="hybrid-note">💻 <strong>Online:</strong> Perform your mock recital via video call with teacher providing live feedback. This is also great performance anxiety practice — performing over video feels surprisingly real.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="week-panel" id="week-8">
+    <div class="week-header">
+      <div class="week-number">08</div>
+      <div class="week-meta">
+        <div class="week-theme">Celebration & Next Steps</div>
+        <h2>Recital Week — Celebrate, Reflect & Look Forward</h2>
+        <p>Eight weeks ago you sat down at a piano for the first time. This week, you perform. And then you plan what comes next.</p>
+      </div>
+    </div>
+    <div class="sections-grid">
+      <div class="section-card open">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-obj">🎯</div>
+          <div><div class="section-label">All Sections</div><div class="section-title">Week 8 Overview</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li><span class="li-marker">→</span><strong>Objectives:</strong> Perform a mini-recital of 2–3 polished pieces; demonstrate all skills learned across 8 weeks; articulate personal musical goals for the next 8 weeks</li>
+            <li><span class="li-marker">→</span><strong>Warm-Up:</strong> Your usual routine — now it should feel familiar and grounding. C scale, a chord progression, finger exercises. The ritual calms performance nerves.</li>
+            <li><span class="li-marker">→</span><strong>Theory Review Showcase:</strong> Teacher asks 5 spontaneous theory questions (note names, chord types, time signatures, dynamic markings, scale structure). The student answers verbally — no piano needed. Shows internalized knowledge.</li>
+            <li><span class="li-marker">→</span><strong>Ear Training Final:</strong> Major or minor? Step or skip? High or low? Quick-fire 10-question ear test. Compare to Week 1 baseline.</li>
+            <li><span class="li-marker">→</span><strong>The Recital Program:</strong> Student selects and introduces each piece by name and composer before playing. Presenting your music is part of musicianship.</li>
+            <li><span class="li-marker">→</span><strong>Flowkey App — Final Report:</strong> Review the app's 8-week progress analytics together. Celebrate milestones: accuracy improvements, songs completed, practice streaks. This data tells a story.</li>
+            <li><span class="li-marker">→</span><strong>Offline Celebration:</strong> Listen to a professional recording of one piece you played this week. Notice the difference — and appreciate how far you've come while seeing where the road still leads.</li>
+            <li><span class="li-marker">→</span><strong>Assessment — Full Portfolio:</strong> ① Recital performance (teacher rates: 1–5 each on technique, musicality, rhythm, stage presence) ② Theory quiz (10 questions) ③ Flowkey App 8-week completion report ④ Personal reflection letter: "What did piano teach me about myself?"</li>
+            <li><span class="li-marker">→</span><strong>Looking Forward — Suggested Next 8 Weeks:</strong> G major scale and key signature; Am and Dm chords (minor harmony); 3/4 time signature (waltz feel); Pedal technique (sustain pedal); New repertoire: Clementi Sonatina, jazz standard (simplified), one pop song with full chord accompaniment</li>
+          </ul>
+          <div class="flo-badge">🟢 Flowkey App · 8-Week Progress Review + Next Level Unlock</div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head" onclick="toggleSection(this)">
+          <div class="section-icon icon-motiv">✨</div>
+          <div><div class="section-label">Final Word</div><div class="section-title">A Note for the Student</div></div>
+          <div class="section-toggle">+</div>
+        </div>
+        <div class="section-body">
+          <div class="challenge-box">
+            <h4>🎹 You Did It</h4>
+            <p>Eight weeks ago, the piano was a mystery. Now you can read music, play chords, shape phrases, understand harmony, and perform pieces with intention and feeling. The path ahead is long — and that's wonderful news. Every great pianist you've ever admired once sat exactly where you are now. The instrument is patient. Keep going.</p>
+          </div>
+          <ul style="margin-top:16px;">
+            <li><span class="li-marker">→</span><strong>The most important habit:</strong> Daily practice, even 10 minutes. Consistency beats marathon sessions every time.</li>
+            <li><span class="li-marker">→</span><strong>Next milestone to aim for:</strong> Learn one piece entirely by ear — no sheet music, no app. Trust what you've built.</li>
+            <li><span class="li-marker">→</span><strong>Share your music:</strong> Play for one person this week who hasn't heard you before. Music is meant to be shared.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div>Flowkey App · <span>8-Week Adult Beginner Curriculum</span> · Hybrid Format</div>
+  <div>Designed for in-person & online delivery</div>
+</footer>
+
+<script>
+  function showWeek(n, btn, progIdx) {
+    // Hide all panels
+    document.querySelectorAll('.week-panel').forEach(p => p.classList.remove('active'));
+    // Show target
+    document.getElementById('week-' + n).classList.add('active');
+
+    // Update nav buttons
+    if (btn) {
+      document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    } else {
+      document.querySelectorAll('.week-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === n - 1);
+      });
+    }
+
+    // Update progress dots
+    document.querySelectorAll('.prog-step').forEach((s, i) => {
+      s.classList.toggle('active', i === n - 1);
+    });
+
+    // Scroll to main
+    document.querySelector('.main').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function toggleSection(head) {
+    const card = head.parentElement;
+    card.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
